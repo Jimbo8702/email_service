@@ -1,11 +1,13 @@
 package main
 
 import (
-	"context"
+	"fmt"
 	"log"
+	"net"
 
 	"github.com/Jimbo8702/email_service/types"
 	"github.com/sendgrid/sendgrid-go"
+	"google.golang.org/grpc"
 )
 
 func main() {
@@ -13,19 +15,23 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	sg := sendgrid.NewSendClient(GetAppConfig().SendGridApiKey)
-
-	svc := NewSendGridEmailSerivce(sg, fb)
-
-	testEmail := &types.Email{
-		UserID: "O1nm8wcHJdV5x24MkR20GMXVNmO2",
-		Username: "MyCoolUsername",
-		FullName: "James Sgarella",
-		Type: types.WELCOME_EMAIL,
-	}
-
-	if err := svc.SendEmail(context.Background(), testEmail); err != nil {
-		log.Fatal(err)
-	}
+	var (
+		sg 	   = sendgrid.NewSendClient(GetAppConfig().SendGridApiKey)
+		svc    = NewSendGridEmailSerivce(sg, fb)
+		svcwl  = NewLogMiddleware(svc)
+	)
+	log.Fatal(makeGRPCTransport(GetAppConfig().GRPC_LISTEN_ADDR, svcwl))
 }
 
+func makeGRPCTransport(listenAddr string, svc EmailService) error {
+	fmt.Println("GRPC transport running on port:", listenAddr)
+	ln, err := net.Listen("tcp", listenAddr)
+	if err != nil {
+		return err
+	}
+	defer ln.Close()
+	server := grpc.NewServer([]grpc.ServerOption{}...)
+
+	types.RegisterEmailSerivceServer(server, NewGRPCEmailServer(svc))
+	return server.Serve(ln)
+}

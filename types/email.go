@@ -1,13 +1,8 @@
 package types
 
-import (
-	"errors"
-	"os"
-)
-
 var (
 	WELCOME_EMAIL                    = "welcome"
-	SUBMIT_RESERVATION_SUCCESS_EMAIL = "user_reservation"
+	SUBMISSION_SUCCESS_EMAIL         = "user_reservation_submission"
 	RESERVATION_APPROVED_EMAIL       = "reservation_approved"
 	RESERVATION_ADMIN_EMAIL          = "admin_reservation"
 )
@@ -18,19 +13,14 @@ type Email struct {
 	FullName string
 	Username string
 	Type     string
+	Data     EmailReservationData
 }
 
-func (e *Email) GetEmailTemplateID() (string, error) {
-	switch e.Type {
-	case WELCOME_EMAIL:
-		return os.Getenv("WELCOME_EMAIL_TEMPLATE_ID"), nil
-	case SUBMIT_RESERVATION_SUCCESS_EMAIL:
-		return os.Getenv("SUBMIT_RESERVATION_SUCCESS_EMAIL_TEMPLATE_ID"), nil
-	case RESERVATION_APPROVED_EMAIL: 
-	   return os.Getenv("RESERVATION_APPROVED_EMAIL_TEMPLATE_ID"), nil
-	case RESERVATION_ADMIN_EMAIL:
-		return os.Getenv("RESERVATION_ADMIN_EMAIL_TEMPLATE_ID"), nil
-	default: 
-		return "", errors.New("email type not suporrted")
-	}
+type EmailReservationData struct {
+	ReservationID 	string
+	ProductID       string
+	ProductName 	string
+	StartDate       string
+	EndDate         string
+	MediaURL        string
 }

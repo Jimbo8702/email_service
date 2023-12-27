@@ -2,11 +2,9 @@ package main
 
 import (
 	"context"
-	"errors"
 
 	firebase "firebase.google.com/go/v4"
 	"firebase.google.com/go/v4/auth"
-	"github.com/Jimbo8702/email_service/types"
 )
 
 
@@ -25,23 +23,23 @@ func NewFirebaseAuthClient(fbAccountID string) (*auth.Client, error) {
 	return client, err
 }
 
-func GetTemplateIDForEmail(t string) (string, error) {
-	ids := GetTemplateIDs()
+// func GetTemplateIDForEmail(t string) (string, error) {
+// 	ids := GetTemplateIDs()
 
-	switch t {
-	case types.WELCOME_EMAIL:
-		return ids.WELCOME_EMAIL, nil
+// 	switch t {
+// 	case types.WELCOME_EMAIL:
+// 		return ids.WELCOME_EMAIL, nil
 
-	case types.SUBMIT_RESERVATION_SUCCESS_EMAIL:
-		return ids.SUBMIT_RESERVATION_SUCCESS_EMAIL, nil
+// 	case types.SUBMIT_RESERVATION_SUCCESS_EMAIL:
+// 		return ids.SUBMIT_RESERVATION_SUCCESS_EMAIL, nil
 
-	case types.RESERVATION_APPROVED_EMAIL: 
-	   return ids.RESERVATION_APPROVED_EMAIL, nil
+// 	case types.RESERVATION_APPROVED_EMAIL: 
+// 	   return ids.RESERVATION_APPROVED_EMAIL, nil
 
-	case types.RESERVATION_ADMIN_EMAIL:
-		return ids.RESERVATION_ADMIN_EMAIL, nil
+// 	case types.RESERVATION_ADMIN_EMAIL:
+// 		return ids.RESERVATION_ADMIN_EMAIL, nil
 		
-	default: 
-		return "", errors.New("email type not suporrted")
-	}
-}
+// 	default: 
+// 		return "", errors.New("email type not suporrted")
+// 	}
+// }

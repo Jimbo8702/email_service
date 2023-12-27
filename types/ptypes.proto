@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option go_package = "github.com/Jimbo8702/email_service/types";
+
+service EmailSerivce {  
+    rpc SendEmail(SendEmailRequest) returns (None);
+}
+
+message None {}
+
+message SendEmailRequest {
+    string userID = 1;
+    string fullname = 2;
+    string username = 3;
+    string emailtype = 4;
+
+    string reservationID = 5;
+    string productID = 6;
+    string productname = 7;
+    string startdate = 8;
+    string enddate = 9;
+    string mediaurl = 10;
+}
